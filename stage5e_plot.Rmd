@@ -1,0 +1,94 @@
+---
+title: "Stage 5e plot"
+author: Mark Ruddy 
+output: html_notebook
+date: 2017-03-01 
+---
+
+
+
+
+
+```{r}
+library(tidyverse)
+library(httr)
+```
+
+
+
+
+
+
+```{r lr05_rename}
+colnames(lr05) <- c("Age", "d18o", "d18o_sd") 
+lr05.cut <- lr05 %>% filter(Age <= 435)
+```
+
+
+```{r plot_curve}
+int.n <- c("Holocene", "Stage 3", "Stage 5", "Stage 7", "Stage 9", "Stage 11")
+gla.n <- c("Stage 2", "Stage 4", "Stage 6", "Stage 8", "Stage 10")
+
+int.x <- c(5, 49, 93, 219, 322, 404)
+gla.x <- c(25, 67, 160, 280, 365)
+
+rec.xmin <- c(0, 38, 75, 190, 310, 390)
+rec.xmax <- c(11.7, 58, 115, 245, 335, 420)
+
+t.size <- 4
+
+p <- ggplot(lr05.cut, aes(x = Age, y= d18o)) +
+  geom_line() + 
+  scale_y_reverse() + 
+  scale_x_reverse(lim=c(460,0)) +
+  theme_light() +
+  theme(axis.text=element_text(size=12), axis.title=element_text(size=16)) +
+#+ theme(axis.title.y=element_blank(), axis.text.y=element_blank(),axis.ticks.y=element_blank())
+  annotate("text", x=int.x, y=2.9, label=int.n, size=t.size, colour="#f1a340") +
+  annotate("text", x=gla.x, y=5.3, label=gla.n, size=t.size, colour="#4D3E87") +
+  # annotate("text", x=105, y=2.9, label= "Stage 5", size=3, colour="#f1a340") +
+  annotate("text", x=125, y=2.9, label= "Stage 5e", size=t.size, colour="#AA3108") +
+  annotate("rect", xmin=rec.xmin, ymin=3.0, xmax=rec.xmax, ymax=5.2, alpha=0.1) +
+  annotate("rect", xmin=115, ymin=3.0, xmax=130, ymax=5.2, alpha=0.3, fill="#AA3108") +
+  xlab("Age (kyr)") +
+  ylab(expression(paste(delta^{18}, "O"))) + 
+  annotate("text", x=460, y=3.3, label= "Warmer", size=5, angle=90, colour="#f1a340") + 
+  annotate("text", x=460, y=4.7, label= "Colder", size=5, angle=90, colour="#4D3E87")
+p
+```
+
+
+
+```{r}
+#/Users/markruddy/Documents/git/markruddy.github.io/assets/images/geo-science/
+ggsave("ois-plot.pdf",plot = p, path = "/Users/markruddy/Documents/website/stage5e_jekyll/working/", width = 280, height = 120, units = "mm" )
+```
+
+
+```{r Add-footnote}
+# from http://statmodeling.com/best-way-to-add-a-footnote-to-a-plot-created-with-ggplot2.html
+
+library(grid)
+library(gridExtra)
+
+footnote <- "Mark Ruddy, 2017"
+
+grid.newpage()
+
+g <- arrangeGrob(p, bottom = textGrob(footnote, x = 0.82, hjust = -0.6, vjust=-2, gp = gpar(fontface = "italic", alpha=0.5, fontsize = 10)))
+
+grid.draw(g)
+
+ggsave("ois-plot.png",plot = g, path = "/Users/markruddy/Documents/git/markruddy.github.io/assets/images/geo-science/", width = 280, height = 120, units = "mm" )
+
+ggsave("ois-plot.pdf",plot = g, path = "/Users/markruddy/Documents/website/stage5e_jekyll/working/", width = 280, height = 120, units = "mm" )
+```
+
+```{r Clean-up}
+rm()
+```
+
+
+
+
+
