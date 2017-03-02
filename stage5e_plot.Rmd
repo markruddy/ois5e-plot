@@ -9,21 +9,24 @@ date: 2017-03-01
 ```{r packages}
 library(tidyverse)
 library(httr)
+library(grid) # plotting
+library(gridExtra) # plotting
 ```
 
 
-```{r get-dataset}
-# from http://www.lorraine-lisiecki.com/LR04stack.txt
+```{r get_dataset}
+# from http://www.lorraine-lisiecki.com/
 url <- "http://www.lorraine-lisiecki.com/LR04stack.txt"
-lr05.scrape <- read.table(url, header=TRUE, sep="\t", skip=4)
-# glimpse(lr05.scrape)
+lr04 <- read.table(url, header=TRUE, sep="\t", quote="", skip=4)
+# glimpse(lr04)
+# View(lr04)
 ```
 
 
 
-```{r lr05_rename}
-colnames(lr05) <- c("Age", "d18o", "d18o_sd") 
-lr05.cut <- lr05 %>% filter(Age <= 435)
+```{r lr04_rename}
+colnames(lr04) <- c("Age", "d18o", "d18o_sd") 
+lr04.cut <- lr04 %>% filter(Age <= 435)
 ```
 
 
@@ -39,7 +42,7 @@ rec.xmax <- c(11.7, 58, 115, 245, 335, 420)
 
 t.size <- 4
 
-p <- ggplot(lr05.cut, aes(x = Age, y= d18o)) +
+p <- ggplot(lr04.cut, aes(x = Age, y= d18o)) +
   geom_line() + 
   scale_y_reverse() + 
   scale_x_reverse(lim=c(460,0)) +
@@ -60,18 +63,8 @@ p
 ```
 
 
-
-```{r}
-#/Users/markruddy/Documents/git/markruddy.github.io/assets/images/geo-science/
-ggsave("ois-plot.pdf",plot = p, path = "/Users/markruddy/Documents/website/stage5e_jekyll/working/", width = 280, height = 120, units = "mm" )
-```
-
-
 ```{r Add-footnote}
 # from http://statmodeling.com/best-way-to-add-a-footnote-to-a-plot-created-with-ggplot2.html
-
-library(grid)
-library(gridExtra)
 
 footnote <- "Mark Ruddy, 2017"
 
@@ -81,14 +74,14 @@ g <- arrangeGrob(p, bottom = textGrob(footnote, x = 0.82, hjust = -0.6, vjust=-2
 
 grid.draw(g)
 
-ggsave("ois-plot.png",plot = g, path = "/Users/markruddy/Documents/git/markruddy.github.io/assets/images/geo-science/", width = 280, height = 120, units = "mm" )
+ggsave("ois-plot2.pdf",plot = g, path = "./", width = 280, height = 120, units = "mm")
 
-ggsave("ois-plot.pdf",plot = g, path = "/Users/markruddy/Documents/website/stage5e_jekyll/working/", width = 280, height = 120, units = "mm" )
+# ggsave("ois-plot2.png",plot = g, path = "./", width = 280, height = 120, units = "mm")
+
+## Clean up 
+rm(list=setdiff(ls(),c("g","lr04")))
 ```
 
-```{r Clean-up}
-rm()
-```
 
 
 
