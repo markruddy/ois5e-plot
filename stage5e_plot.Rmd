@@ -6,16 +6,18 @@ date: 2017-03-01
 ---
 
 
-
-
-
-```{r}
+```{r packages}
 library(tidyverse)
 library(httr)
 ```
 
 
-
+```{r get-dataset}
+# from http://www.lorraine-lisiecki.com/LR04stack.txt
+url <- "http://www.lorraine-lisiecki.com/LR04stack.txt"
+lr05.scrape <- read.table(url, header=TRUE, sep="\t", skip=4)
+# glimpse(lr05.scrape)
+```
 
 
 
