@@ -5,7 +5,7 @@ output: html_notebook
 date: 2017-03-01 
 ---
 
-Packages
+Packages 
 ```{r packages, message=FALSE, warning=FALSE}
 library(tidyverse)
 library(httr)
@@ -22,13 +22,13 @@ glimpse(lr04)
 ```
 
 
-Focus on late Quaternary (around the last 400 thousand years).
+Focus on the Late Quaternary (around the last 400 thousand years).
 ```{r lr04_rename}
 colnames(lr04) <- c("Age", "d18o", "d18o_sd") 
 lr04.cut <- lr04 %>% filter(Age <= 435)
 ```
 
-Plot the 
+Plot the curve.
 ```{r plot_curve, include=FALSE}
 int.n <- c("Holocene", "Stage 3", "Stage 5", "Stage 7", "Stage 9", "Stage 11") # interglacial labels
 gla.n <- c("Stage 2", "Stage 4", "Stage 6", "Stage 8", "Stage 10") # glacial labels
@@ -72,6 +72,8 @@ ggsave("ois-plot2.pdf",plot = g, path = "./", width = 280, height = 120, units =
 # alternative format
 ## ggsave("ois-plot2.png",plot = g, path = "./", width = 280, height = 120, units = "mm")
 ```
+
+Clean up.
 
 ```{r clean-up}
 rm(list=setdiff(ls(),c("g","lr04")))
